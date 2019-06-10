@@ -31,7 +31,7 @@ function addWatermark(data,dx,dy,tint,alpha)
   console.log(tint);
 
   //Get Inidices
-  var indices = {};
+  var indices = new Map();
   for (var i=Math.floor(dx /4);i<Math.floor((dx * 3) /4);i++)
   {
     var ipoints = new Set();
