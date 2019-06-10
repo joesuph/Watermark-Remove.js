@@ -17,4 +17,4 @@ var data = imageData.data;
 for (var i = 0; i < imageData.data.length; i++) {
     imageData.data[i] = 255;
 }
-context.putImageData(imageData.data, dx, dy);
+context.putImageData(imageData.data, 0, 0);
