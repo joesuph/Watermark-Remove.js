@@ -44,12 +44,13 @@ function addWatermark(data,dx,dy,tint,alpha)
   //Apply tint to indices
   for (var i=0;i<data.length;i += 4)
   {
-    if (indices.get(Math.floor(i/(4*dx))).has((i/4)%dx))
-    {
-      data[i] = (1-alpha) * data[i] + alpha * tint[0]
-      data[i+1] = (1-alpha) * data[i] + alpha * tint[1]
-      data[i+2] = (1-alpha) * data[i] + alpha * tint[2]
-    }
+    if (indices.get(Math.floor(i/(4*dx))) != undefined)
+        if(indices.get(Math.floor(i/(4*dx))).has((i/4)%dx))
+        {
+          data[i] = (1-alpha) * data[i] + alpha * tint[0]
+          data[i+1] = (1-alpha) * data[i] + alpha * tint[1]
+          data[i+2] = (1-alpha) * data[i] + alpha * tint[2]
+        }
   }
 
   return data;
