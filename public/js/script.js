@@ -1,7 +1,21 @@
+document.onload(()=>{
+
 var image = document.getElementById('img');
 canvas = document.getElementById('canvas');
 context = canvas.getContext('2d');
 drawImage(image);
+
+
+var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+var tint = [Math.floor(Math.random() * 255),Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
+var alpha = .25;
+imageData.data = addWatermark(imageData.data,image.width,image.height,tint,alpha);
+
+context.putImageData(imageData,0,0);
+
+});
+
 
 function drawImage(image) {
     // Set the canvas the same width and height of the image
@@ -11,16 +25,7 @@ function drawImage(image) {
     context.drawImage(image, 0, 0);
   }
 
-var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-var data = imageData.data;
-
-var tint = [Math.floor(Math.random() * 255),Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
-var alpha = .25;
-imageData.data = addWatermark(imageData.data,image.width,image.height,tint,alpha);
-
-context.putImageData(imageData,0,0);
-
-function addWatermark(data,dx,dy,tint,alpha)
+  function addWatermark(data,dx,dy,tint,alpha)
 {
   console.log("Tint:");
   console.log(tint);
