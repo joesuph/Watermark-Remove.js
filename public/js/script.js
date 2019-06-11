@@ -5,12 +5,14 @@ var imageData;
 var tint;
 var alpha;
 
-
-
+window.addEventListener('load', init);
+function init()
+{
 image = document.getElementById('img');
 canvas = document.getElementById('canvas');
 context = canvas.getContext('2d');
 drawImage(image);
+
 
 imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -21,7 +23,7 @@ imageData.data = addWatermark(imageData.data,image.width,image.height,tint,alpha
 context.putImageData(imageData,0,0);
 
 
-
+}
 
 function drawImage(image) {
     // Set the canvas the same width and height of the image
@@ -48,6 +50,7 @@ function drawImage(image) {
     indices.set(i,ipoints);
   }
   //Apply tint to indices
+  console.log(indices.entries.length)
   for (var i=0;i<data.length;i += 4)
   {
     if (indices.get(Math.floor(i/(4*dx))) != undefined)
