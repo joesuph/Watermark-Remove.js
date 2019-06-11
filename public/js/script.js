@@ -1,20 +1,27 @@
-document.onload = (()=>{
+var image;
+var canvas;
+var context;
+var imageData;
+var tint;
+var alpha;
 
-var image = document.getElementById('img');
+document.onload = function(){
+
+image = document.getElementById('img');
 canvas = document.getElementById('canvas');
 context = canvas.getContext('2d');
 drawImage(image);
 
 
-var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-var tint = [Math.floor(Math.random() * 255),Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
-var alpha = .25;
+tint = [Math.floor(Math.random() * 255),Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
+alpha = .25;
 imageData.data = addWatermark(imageData.data,image.width,image.height,tint,alpha);
 
 context.putImageData(imageData,0,0);
 
-});
+};
 
 
 function drawImage(image) {
