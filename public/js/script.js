@@ -13,7 +13,6 @@ canvas = document.getElementById('canvas');
 context = canvas.getContext('2d');
 drawImage(image);
 
-
 imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
 tint = [Math.floor(Math.random() * 255),Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
@@ -21,7 +20,6 @@ alpha = .25;
 imageData.data = addWatermark(imageData.data,image.width,image.height,tint,alpha);
 
 context.putImageData(imageData,0,0);
-
 
 }
 
@@ -39,15 +37,22 @@ function drawImage(image) {
   console.log(tint);
 
   //Get Inidices
+  var maskRatio = Math.random();
+  var maskamountratio = .3;
+  var maskwidth = maskRatio * image.width * maskamountratio;
+  var maskheight = maskRatio * image.height * maskamountratio;
+  var maskAmount = Math.floor(maskamountratio * image.width * image.height / (maskwidth * maskheight));
+
+  
   var indices = new Map();
   for (var i=Math.floor(dx /4);i<Math.floor((dx * 3) /4);i++)
   {
-    var ipoints = new Set();
+    if (indices.get(i) == undefined)
+        indices.set(i,new Set());
     for(var j=0;j<dy;j++)
     {
-        ipoints.add(j);
+        indices.get(i).add(j);
     }
-    indices.set(i,ipoints);
   }
   //Apply tint to indices
   console.log(indices.entries.length)
