@@ -1,4 +1,4 @@
-document.body.onload(()=>{
+document.onload = (()=>{
 
 var image = document.getElementById('img');
 canvas = document.getElementById('canvas');
