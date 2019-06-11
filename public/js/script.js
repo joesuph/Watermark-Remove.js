@@ -5,13 +5,12 @@ var imageData;
 var tint;
 var alpha;
 
-document.onload = function(){
+
 
 image = document.getElementById('img');
 canvas = document.getElementById('canvas');
 context = canvas.getContext('2d');
 drawImage(image);
-
 
 imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -21,7 +20,7 @@ imageData.data = addWatermark(imageData.data,image.width,image.height,tint,alpha
 
 context.putImageData(imageData,0,0);
 
-};
+
 
 
 function drawImage(image) {
