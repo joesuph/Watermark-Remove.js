@@ -16,8 +16,7 @@ drawImage(image);
 imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
 tint = [Math.floor(Math.random() * 255),Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
-alpha = .25;
-imageData.data = addWatermark(imageData.data,image.width,image.height,tint,alpha);
+imageData.data = addWatermark(imageData.data,image.width,image.height,tint);
 
 context.putImageData(imageData,0,0);
 
@@ -31,7 +30,7 @@ function drawImage(image) {
     context.drawImage(image, 0, 0);
   }
 
-  function addWatermark(data,dx,dy,tint,alpha)
+  function addWatermark(data,dx,dy,tint)
 {
   console.log("Tint:");
   console.log(tint);
@@ -60,8 +59,10 @@ function drawImage(image) {
       }
     }
   }
+
   //Apply tint to indices
   console.log(indices.entries.length)
+  var alpha = Math.random() * .8;
   for (var i=0;i<data.length;i += 4)
   {
     if (indices.get(Math.floor(i/(4*dx))) != undefined)
