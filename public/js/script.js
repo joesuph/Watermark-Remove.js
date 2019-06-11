@@ -50,11 +50,11 @@ function drawImage(image) {
 
     var rx = Math.floor(image.width * Math.random() * (1-maskwidth/image.width));
     var ry = Math.floor(image.height * Math.random() * (1 - maskwidth/image.width));
-    for (var i=rx;i<rx+maskwidth;i++)
+    for (var i=ry;i<ry+maskheight;i++)
     {
       if (indices.get(i) == undefined)
           indices.set(i,new Set());
-      for(var j=ry;j<ry + maskheight;j++)
+      for(var j=rx;j<rx + maskwidth;j++)
       {
           indices.get(i).add(j);
       }
