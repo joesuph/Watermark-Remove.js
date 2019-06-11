@@ -37,21 +37,27 @@ function drawImage(image) {
   console.log(tint);
 
   //Get Inidices
-  var maskRatio = Math.random();
-  var maskamountratio = .3;
-  var maskwidth = maskRatio * image.width * maskamountratio;
-  var maskheight = maskRatio * image.height * maskamountratio;
-  var maskAmount = Math.floor(maskamountratio * image.width * image.height / (maskwidth * maskheight));
+  var maskRatio = Math.random() * .5;
+  var maskimageratio = .3;
+  var maskwidth = maskRatio * image.width * maskimageratio;
+  var maskheight = maskRatio * image.height * maskimageratio;
+  var maskAmount = Math.floor(maskimageratio * image.width * image.height / (maskwidth * maskheight));
 
   
   var indices = new Map();
-  for (var i=Math.floor(dx /4);i<Math.floor((dx * 3) /4);i++)
+  for(var a=0;a<maskAmount;a++)
   {
-    if (indices.get(i) == undefined)
-        indices.set(i,new Set());
-    for(var j=0;j<dy;j++)
+
+    var rx = Math.floor(image.width * Math.random() * (1-maskwidth/image.width));
+    var ry = Math.floor(image.height * Math.random() * (1 - maskwidth/image.width));
+    for (var i=rx;i<rx+maskwidth;i++)
     {
-        indices.get(i).add(j);
+      if (indices.get(i) == undefined)
+          indices.set(i,new Set());
+      for(var j=ry;j<ry + maskheight;j++)
+      {
+          indices.get(i).add(j);
+      }
     }
   }
   //Apply tint to indices
