@@ -15,7 +15,7 @@ drawImage(image);
 
 imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-tint = [Math.floor(Math.random() * 255),Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
+tint = [255,255,255]
 imageData.data = addWatermark(imageData.data,image.width,image.height,tint);
 
 context.putImageData(imageData,0,0);
