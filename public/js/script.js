@@ -6,29 +6,28 @@ var tint;
 var alpha;
 
 window.addEventListener('load', init);
+/**
+ * Load image into canvas.
+ * Apply watermark to image.
+ */
 function init()
 {
-image = document.getElementById('img');
-canvas = document.getElementById('canvas');
-context = canvas.getContext('2d');
-drawImage(image);
+  image = document.getElementById('img');
+  canvas = document.getElementById('canvas');
+  context = canvas.getContext('2d');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  context.drawImage(image, 0, 0);
 
-imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-tint = [255,255,255]
-imageData.data = addWatermark(imageData.data,image.width,image.height,tint);
+  tint = [255,255,255]
+  imageData.data = addWatermark(imageData.data,image.width,image.height,tint);
 
-context.putImageData(imageData,0,0);
-
+  context.putImageData(imageData,0,0);
 }
 
-function drawImage(image) {
-    // Set the canvas the same width and height of the image
-    canvas.width = image.width;
-    canvas.height = image.height;
-    
-    context.drawImage(image, 0, 0);
-  }
+
 
   function addWatermark(data,dx,dy,tint)
 {
@@ -66,8 +65,8 @@ function drawImage(image) {
   var alpha = Math.random() * .8;
   for (var i=0;i<data.length;i += 4)
   {
-    if (indices.get(Math.floor(i/(4*dx))) != undefined)
-        if(indices.get(Math.floor(i/(4*dx))).has((i/4)%dx))
+    if (indices.get(Math.floor(i/(4*image.width))) != undefined)
+        if(indices.get(Math.floor(i/(4*image.width))).has((i/4)%image.width))
         {
           data[i] = (1-alpha) * data[i] + alpha * tint[0]
           data[i+1] = (1-alpha) * data[i+1] + alpha * tint[1]
@@ -76,4 +75,67 @@ function drawImage(image) {
   }
 
   return data;
+}
+
+/*
+function getCursorPosition(canvas, event) {
+  const rect = canvas.getBoundingClientRect()
+  const x = event.clientX - rect.left
+  const y = event.clientY - rect.top
+  return [x,y];
+}
+
+const canvas = document.querySelector('canvas')
+canvas.addEventListener('mousedown', function(e) {
+    point = getCursorPosition(canvas, e);
+    imageData.data
+})
+*/
+
+//extra
+var offsetLeft = elCanvas.offsetLeft;
+var offsetTop  = elCanvas.offsetTop;
+var elPage = document.body;
+var scrollLeft = elPage.scrollLeft;
+var scrollTop  = elPage.scrollTop;
+
+var drawing = false;
+var lastPos = null;
+
+listen(Canvas, 'mousedown', function(event) {
+    drawing = true;
+    lastPos = getPos(event);
+});
+listen(Canvas, 'mousemove', function(event) {
+    if (!drawing) {
+        return;
+    }
+    
+    var p = getPos(event);
+    context.beginPath();
+    context.moveTo(lastPos[0], lastPos[1]);
+    context.lineTo(p[0], p[1]);
+    context.stroke();
+    lastPos = p;
+});
+listen(document, 'mouseup', function(event) {
+    drawing = false;
+});
+listen(document.querySelector('#download'), 'click', function(event) {
+    window.open(Canvas.toDataURL(), '_blank');
+});
+
+listen(document, 'scroll', function(event) {
+    scrollLeft = elPage.scrollLeft;
+    scrollTop  = elPage.scrollTop;
+});
+
+function listen(elem, type, listener) {
+    elem.addEventListener(type, listener, false);
+}
+
+function getPos(event) {
+    var x = event.clientX - offsetLeft + scrollLeft;
+    var y = event.clientY - offsetTop  + scrollTop;
+    return [x, y];
 }
