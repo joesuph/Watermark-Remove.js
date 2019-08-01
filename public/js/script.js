@@ -69,9 +69,9 @@ function drawImage(image) {
     if (indices.get(Math.floor(i/(4*dx))) != undefined)
         if(indices.get(Math.floor(i/(4*dx))).has((i/4)%dx))
         {
-          data[i] = tint[0]//(1-alpha) * data[i] + alpha * tint[0]
-          data[i+1] =tint[0]// (1-alpha) * data[i] + alpha * tint[1]
-          data[i+2] = tint[0]//(1-alpha) * data[i] + alpha * tint[2]
+          data[i] = (1-alpha) * data[i] + alpha * tint[0]
+          data[i+1] = (1-alpha) * data[i+1] + alpha * tint[1]
+          data[i+2] =(1-alpha) * data[i+2] + alpha * tint[2]
         }
   }
 
