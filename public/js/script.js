@@ -93,9 +93,8 @@ canvas.addEventListener('mousedown', function(e) {
 */
 
 //extra
-var Canvas = canvas;
-var offsetLeft = Canvas.offsetLeft;
-var offsetTop  = Canvas.offsetTop;
+var offsetLeft = canvas.offsetLeft;
+var offsetTop  = canvas.offsetTop;
 var elPage = document.body;
 var scrollLeft = elPage.scrollLeft;
 var scrollTop  = elPage.scrollTop;
@@ -103,11 +102,11 @@ var scrollTop  = elPage.scrollTop;
 var drawing = false;
 var lastPos = null;
 
-listen(Canvas, 'mousedown', function(event) {
+listen(canvas, 'mousedown', function(event) {
     drawing = true;
     lastPos = getPos(event);
 });
-listen(Canvas, 'mousemove', function(event) {
+listen(canvas, 'mousemove', function(event) {
     if (!drawing) {
         return;
     }
@@ -123,7 +122,7 @@ listen(document, 'mouseup', function(event) {
     drawing = false;
 });
 listen(document.querySelector('#download'), 'click', function(event) {
-    window.open(Canvas.toDataURL(), '_blank');
+    window.open(canvas.toDataURL(), '_blank');
 });
 
 listen(document, 'scroll', function(event) {
