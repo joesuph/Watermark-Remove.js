@@ -94,16 +94,15 @@ canvas.addEventListener('mousedown', function(e) {
 
 
 function init2(){
-  canvas.addEventListener(onmousedown,()=>{paint=true;})
-  canvas.addEventListener(onmousemove,(e)=>{
-    if(paint)
-    {
-      console.log(getCursorPosition(canvas,e));
+    canvas.onmousedown = ()=>{paint=true;}
+    canvas.onmousemove = (e)=>{
+      if(paint)
+      {
+        console.log(getCursorPosition(canvas,e));
+      }
     }
-  })
-  canvas.addEventListener(onmouseleave,()=>{paint=false})
-  canvas.addEventListener(onmouseup,()=>{paint=false;})
-
+    canvas.onmouseleave = ()=>{paint=false;}
+    canvas.onmouseup = ()=>{paint=false;}
 }
 //onmousedown start paint
 //while paint, on mousemove add pixel to edgeList
