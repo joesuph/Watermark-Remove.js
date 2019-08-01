@@ -25,6 +25,8 @@ function init()
   imageData.data = addWatermark(imageData.data,image.width,image.height,tint);
 
   context.putImageData(imageData,0,0);
+
+  init2();
 }
 
 
@@ -93,14 +95,24 @@ canvas.addEventListener('mousedown', function(e) {
 */
 
 //extra
-var offsetLeft = canvas.offsetLeft;
-var offsetTop  = canvas.offsetTop;
-var elPage = document.body;
-var scrollLeft = elPage.scrollLeft;
-var scrollTop  = elPage.scrollTop;
+var offsetLeft;
+  var offsetTop;
+  var elPage;
+  var scrollLeft;
+  var scrollTop ;
+  var drawing = false;
+  var lastPos = null;
 
-var drawing = false;
-var lastPos = null;
+ function init2(){
+  var offsetLeft = canvas.offsetLeft;
+  var offsetTop  = canvas.offsetTop;
+  var elPage = document.body;
+  var scrollLeft = elPage.scrollLeft;
+  var scrollTop  = elPage.scrollTop;
+
+  var drawing = false;
+  var lastPos = null;
+}
 
 listen(canvas, 'mousedown', function(event) {
     drawing = true;
