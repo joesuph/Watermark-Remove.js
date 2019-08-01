@@ -93,8 +93,8 @@ canvas.addEventListener('mousedown', function(e) {
 */
 
 //extra
-var offsetLeft = elCanvas.offsetLeft;
-var offsetTop  = elCanvas.offsetTop;
+var offsetLeft = Canvas.offsetLeft;
+var offsetTop  = Canvas.offsetTop;
 var elPage = document.body;
 var scrollLeft = elPage.scrollLeft;
 var scrollTop  = elPage.scrollTop;
