@@ -23,6 +23,7 @@ function init()
     imageData.data = addWatermark(imageData.data,image.width,image.height,tint);
 
     context.putImageData(imageData,0,0);
+    init2();
 }
 
 
@@ -92,16 +93,18 @@ canvas.addEventListener('mousedown', function(e) {
 */
 
 
-canvas.addEventListener(onmousedown,()=>{paint=true;})
-canvas.addEventListener(onmousemove,(e)=>{
-  if(paint)
-  {
-     console.log(getCursorPosition(canvas,e));
-  }
-})
-canvas.addEventListener(onmouseleave,()=>{paint=false})
-canvas.addEventListener(onmouseup,()=>{paint=false;})
+function init2(){
+  canvas.addEventListener(onmousedown,()=>{paint=true;})
+  canvas.addEventListener(onmousemove,(e)=>{
+    if(paint)
+    {
+      console.log(getCursorPosition(canvas,e));
+    }
+  })
+  canvas.addEventListener(onmouseleave,()=>{paint=false})
+  canvas.addEventListener(onmouseup,()=>{paint=false;})
 
+}
 //onmousedown start paint
 //while paint, on mousemove add pixel to edgeList
 //on mouseup connect last pixel to first pixel with edgePixels, toggle paint
