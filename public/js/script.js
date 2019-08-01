@@ -4,34 +4,30 @@ var context;
 var imageData;
 var tint;
 var alpha;
+var paint = false;
 
 window.addEventListener('load', init);
-/**
- * Load image into canvas.
- * Apply watermark to image.
- */
+
 function init()
 {
-  image = document.getElementById('img');
-  canvas = document.getElementById('canvas');
-  context = canvas.getContext('2d');
-  canvas.width = image.width;
-  canvas.height = image.height;
-  context.drawImage(image, 0, 0);
+    image = document.getElementById('img');
+    canvas = document.getElementById('canvas');
+    context = canvas.getContext('2d');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    context.drawImage(image, 0, 0);
 
-  imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-  tint = [255,255,255]
-  imageData.data = addWatermark(imageData.data,image.width,image.height,tint);
+    tint = [255,255,255]
+    imageData.data = addWatermark(imageData.data,image.width,image.height,tint);
 
-  context.putImageData(imageData,0,0);
-
-  init2();
+    context.putImageData(imageData,0,0);
 }
 
 
 
-  function addWatermark(data,dx,dy,tint)
+function addWatermark(data,dx,dy,tint)
 {
   console.log("Tint:");
   console.log(tint);
@@ -79,7 +75,7 @@ function init()
   return data;
 }
 
-/*
+
 function getCursorPosition(canvas, event) {
   const rect = canvas.getBoundingClientRect()
   const x = event.clientX - rect.left
@@ -87,6 +83,7 @@ function getCursorPosition(canvas, event) {
   return [x,y];
 }
 
+/*
 const canvas = document.querySelector('canvas')
 canvas.addEventListener('mousedown', function(e) {
     point = getCursorPosition(canvas, e);
@@ -94,60 +91,20 @@ canvas.addEventListener('mousedown', function(e) {
 })
 */
 
-//extra
-var offsetLeft;
-  var offsetTop;
-  var elPage;
-  var scrollLeft;
-  var scrollTop ;
-  var drawing = false;
-  var lastPos = null;
 
- function init2(){
-  var offsetLeft = canvas.offsetLeft;
-  var offsetTop  = canvas.offsetTop;
-  var elPage = document.body;
-  var scrollLeft = elPage.scrollLeft;
-  var scrollTop  = elPage.scrollTop;
+canvas.addEventListener(onmousedown,()=>{paint=true;})
+canvas.addEventListener(onmousemove,(e)=>{
+  if(paint)
+  {
+     console.log(getCursorPosition(canvas,e));
+  }
+})
+canvas.addEventListener(onmouseleave,()=>{paint=false})
+canvas.addEventListener(onmouseup,()=>{paint=false;})
 
-  var drawing = false;
-  var lastPos = null;
-}
+//onmousedown start paint
+//while paint, on mousemove add pixel to edgeList
+//on mouseup connect last pixel to first pixel with edgePixels, toggle paint
 
-listen(canvas, 'mousedown', function(event) {
-    drawing = true;
-    lastPos = getPos(event);
-});
-listen(canvas, 'mousemove', function(event) {
-    if (!drawing) {
-        return;
-    }
-    
-    var p = getPos(event);
-    context.beginPath();
-    context.moveTo(lastPos[0], lastPos[1]);
-    context.lineTo(p[0], p[1]);
-    context.stroke();
-    lastPos = p;
-});
-listen(document, 'mouseup', function(event) {
-    drawing = false;
-});
-listen(document.querySelector('#download'), 'click', function(event) {
-    window.open(canvas.toDataURL(), '_blank');
-});
-
-listen(document, 'scroll', function(event) {
-    scrollLeft = elPage.scrollLeft;
-    scrollTop  = elPage.scrollTop;
-});
-
-function listen(elem, type, listener) {
-    elem.addEventListener(type, listener, false);
-}
-
-function getPos(event) {
-    var x = event.clientX - offsetLeft + scrollLeft;
-    var y = event.clientY - offsetTop  + scrollTop;
-    return [x, y];
-}
+//on remove watemark button, get list of pixels in the region
+//Add a rgb color dial and and alpha dial and edit the pixels in the region
