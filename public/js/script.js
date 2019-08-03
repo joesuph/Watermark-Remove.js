@@ -98,6 +98,7 @@ function init2(){
     canvas.onmousemove = (e)=>{
       if(paint)
       {
+        console.log('move');
         console.log(getCursorPosition(canvas,e));
       }
     }
