@@ -94,9 +94,7 @@ canvas.addEventListener('mousedown', function(e) {
 
 
 function init2(){
-    canvas.onmousedown = (e)=>
-    
-    {paint=true;edget = [getCursorPosition(e)];}
+    canvas.onmousedown = (e)=>{paint=true;edget = [getCursorPosition(canvas,e)];}
     canvas.onmousemove = (e)=>{
       if(paint)
       {
