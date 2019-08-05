@@ -5,6 +5,7 @@ var imageData;
 var tint;
 var alpha;
 var paint = false;
+var edget;
 
 window.addEventListener('load', init);
 
@@ -39,7 +40,6 @@ function addWatermark(data,dx,dy,tint)
   var maskwidth = maskRatio * image.width * maskimageratio;
   var maskheight = maskRatio * image.height * maskimageratio;
   var maskAmount = Math.floor(maskimageratio * image.width * image.height / (maskwidth * maskheight));
-
   
   var indices = new Map();
   for(var a=0;a<maskAmount;a++)
@@ -94,14 +94,29 @@ canvas.addEventListener('mousedown', function(e) {
 
 
 function init2(){
-    canvas.onmousedown = ()=>{paint=true;}
+    canvas.onmousedown = (e)=>
+    
+    {paint=true;edget = [getCursorPosition(e)];}
     canvas.onmousemove = (e)=>{
       if(paint)
       {
+        var data = imageData.data;
         console.log('move');
         var p1 = getCursorPosition(canvas,e);
         p1 = [Math.round(p1[0]),Math.round(p1[1])];
-        var data = imageData.data;
+        var lp = getLinePoints(edget[edget.length-1],p1);
+        
+        for(var i=0;i<lp.length;i++)
+        {
+          edget.push(lp[i]);
+          data[(lp[i][1]*image.width + lp[i][0])*4] = 0;
+          data[(lp[i][1]*image.width + lp[i][0])*4+1] = 255;
+          data[(lp[i][1]*image.width +lp[i][0])*4+2] = 0;
+          imageData.data = data;
+          
+        }
+        edget.push(p1);
+
         data[(p1[1]*image.width + p1[0])*4] = 0;
         data[(p1[1]*image.width + p1[0])*4+1] = 255;
         data[(p1[1]*image.width + p1[0])*4+2] = 0;
