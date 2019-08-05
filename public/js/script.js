@@ -99,12 +99,57 @@ function init2(){
       if(paint)
       {
         console.log('move');
-        console.log(getCursorPosition(canvas,e));
+        var p1 = getCursorPosition(canvas,e);
+        var data = imageData.data;
+        //
+        data[(p1[1]*image.width + p1[0])*4] = 255
+        data[(p1[1]*image.width + p1[0])*4+1] = 255
+        data[(p1[1]*image.width + p1[0])*4+2] = 0
+
       }
     }
     canvas.onmouseleave = ()=>{paint=false;}
     canvas.onmouseup = ()=>{paint=false;}
 }
+
+function getLinePoints(p1,p2)
+{
+	var slope;
+  var b;
+  var e;
+  var original;
+  
+  var horiz = p1[0]-p2[0] > p1[1]-p2[1];
+  //Get start x,y and ending y
+  if(horiz)
+  {
+    if(p1[0]<p2[0]){b=p1[0];e=p2[0];original=p1[1];}
+    else {b=p2[0];e=p1[0];original=p2[1];}
+    slope = (p1[1]-p2[1])/(p1[0]-p2[0]);
+
+  }
+  else
+  {
+    if(p1[1]<p2[1]){b=p1[1];e=p2[1];original=p1[0];}
+    else {b=p2[1];e=p1[1];original=p1[0];}
+    slope = (p1[0]-p2[0])/(p1[1]-p2[1]);
+  }
+  var nps = [];
+	var s = b + 1;
+  //(yn-yo)/(xn-xo)=slope
+  // yn = slope*(xn-xo)+yo
+  while(s<e)
+	{
+	if(horiz)nps.push([s,Math.round((s-b)*slope+original)])
+  else nps.push([Math.round((s-b)*slope+original),s])
+  
+	s+= 1;
+	}
+	return nps;
+  
+}
+
+
 //onmousedown start paint
 //while paint, on mousemove add pixel to edgeList
 //on mouseup connect last pixel to first pixel with edgePixels, toggle paint
