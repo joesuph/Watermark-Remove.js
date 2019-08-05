@@ -100,10 +100,11 @@ function init2(){
       {
         console.log('move');
         var p1 = getCursorPosition(canvas,e);
+        p1 = [Math.round(p1[0]),Math.round(p1[1])];
         var data = imageData.data;
-        data[(p1[1]*image.width + p1[0])*4] = 255
-        data[(p1[1]*image.width + p1[0])*4+1] = 255
-        data[(p1[1]*image.width + p1[0])*4+2] = 0
+        data[(p1[1]*image.width + p1[0])*4] = 0;
+        data[(p1[1]*image.width + p1[0])*4+1] = 255;
+        data[(p1[1]*image.width + p1[0])*4+2] = 0;
         imageData.data = data;
         context.putImageData(imageData,0,0);
       }
