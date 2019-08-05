@@ -70,6 +70,7 @@ function addWatermark(data,dx,dy,tint)
           data[i] = (1-alpha) * data[i] + alpha * tint[0]
           data[i+1] = (1-alpha) * data[i+1] + alpha * tint[1]
           data[i+2] =(1-alpha) * data[i+2] + alpha * tint[2]
+          context.putImageData(data,0,0);
         }
   }
 
@@ -101,7 +102,6 @@ function init2(){
         console.log('move');
         var p1 = getCursorPosition(canvas,e);
         var data = imageData.data;
-        //
         data[(p1[1]*image.width + p1[0])*4] = 255
         data[(p1[1]*image.width + p1[0])*4+1] = 255
         data[(p1[1]*image.width + p1[0])*4+2] = 0
