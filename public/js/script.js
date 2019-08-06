@@ -92,9 +92,9 @@ canvas.addEventListener('mousedown', function(e) {
 })
 */
 
-
+var last;
 function init2(){
-    canvas.onmousedown = (e)=>{paint=true;edget = [getCursorPosition(canvas,e)];}
+    canvas.onmousedown = (e)=>{paint=true;edget = new Set([getCursorPosition(canvas,e)]);last = getCursorPosition(canvas,e);}
     canvas.onmousemove = (e)=>{
       if(paint)
       {
@@ -102,18 +102,18 @@ function init2(){
         console.log('move');
         var p1 = getCursorPosition(canvas,e);
         p1 = [Math.round(p1[0]),Math.round(p1[1])];
-        var lp = getLinePoints(edget[edget.length-1],p1);
-        
+        var lp = getLinePoints(last,p1);
+        last = p1;
         for(var i=0;i<lp.length;i++)
         {
-          edget.push(lp[i]);
+          edget.add(lp[i]);
           data[(lp[i][1]*image.width + lp[i][0])*4] = 0;
           data[(lp[i][1]*image.width + lp[i][0])*4+1] = 255;
           data[(lp[i][1]*image.width +lp[i][0])*4+2] = 0;
           imageData.data = data;
           
         }
-        edget.push(p1);
+        edget.add(p1);
 
         data[(p1[1]*image.width + p1[0])*4] = 0;
         data[(p1[1]*image.width + p1[0])*4+1] = 255;
@@ -133,7 +133,7 @@ function getLinePoints(p1,p2)
   var e;
   var original;
   
-  var horiz = p1[0]-p2[0] > p1[1]-p2[1];
+  var horiz = Math.abs(p1[0]-p2[0]) > Math.abs(p1[1]-p2[1]);
   //Get start x,y and ending y
   if(horiz)
   {
