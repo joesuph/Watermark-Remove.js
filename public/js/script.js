@@ -84,6 +84,18 @@ function getCursorPosition(canvas, event) {
   return [x,y];
 }
 
+function findPos(e,obj) {
+  var curleft = 0, curtop = 0;
+  if (obj.offsetParent) {
+      do {
+          curleft += obj.offsetLeft;
+          curtop += obj.offsetTop;
+      } while (obj = obj.offsetParent);
+      return [e.pageX-curleft, e.pageY-curtop];
+  }
+  return undefined;
+}
+
 /*
 const canvas = document.querySelector('canvas')
 canvas.addEventListener('mousedown', function(e) {
@@ -94,13 +106,16 @@ canvas.addEventListener('mousedown', function(e) {
 
 var last;
 function init2(){
-    canvas.onmousedown = (e)=>{paint=true;edget = new Set([getCursorPosition(canvas,e)]);last = getCursorPosition(canvas,e);}
+    //canvas.onmousedown = (e)=>{paint=true;edget = new Set([getCursorPosition(canvas,e)]);last = getCursorPosition(canvas,e);}
+    canvas.onmousedown = (e)=>{paint=true;edget = new Set([findPos(e,this)]);last =findPos(e,this);}
     canvas.onmousemove = (e)=>{
       if(paint)
       {
         var data = imageData.data;
         console.log('move');
-        var p1 = getCursorPosition(canvas,e);
+        //var p1 = getCursorPosition(canvas,e);
+        var p1 = findPos(e,this);
+
         p1 = [Math.round(p1[0]),Math.round(p1[1])];
         var lp = getLinePoints(last,p1);
         last = p1;
@@ -134,6 +149,7 @@ function getLinePoints(p1,p2)
   var original;
   
   var horiz = Math.abs(p1[0]-p2[0]) > Math.abs(p1[1]-p2[1]);
+  
   //Get start x,y and ending y
   if(horiz)
   {
