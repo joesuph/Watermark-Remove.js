@@ -107,14 +107,14 @@ canvas.addEventListener('mousedown', function(e) {
 var last;
 function init2(){
     //canvas.onmousedown = (e)=>{paint=true;edget = new Set([getCursorPosition(canvas,e)]);last = getCursorPosition(canvas,e);}
-    canvas.onmousedown = (e)=>{paint=true;edget = new Set([findPos(e,this)]);last =findPos(e,this);}
+    canvas.onmousedown = (e)=>{paint=true;edget = new Set([findPos(e,canvas)]);last =findPos(e,canvas);}
     canvas.onmousemove = (e)=>{
       if(paint)
       {
         var data = imageData.data;
         console.log('move');
         //var p1 = getCursorPosition(canvas,e);
-        var p1 = findPos(e,this);
+        var p1 = findPos(e,canvas);
 
         p1 = [Math.round(p1[0]),Math.round(p1[1])];
         var lp = getLinePoints(last,p1);
@@ -161,7 +161,7 @@ function getLinePoints(p1,p2)
   else
   {
     if(p1[1]<p2[1]){b=p1[1];e=p2[1];original=p1[0];}
-    else {b=p2[1];e=p1[1];original=p1[0];}
+    else {b=p2[1];e=p1[1];original=p2[0];}
     slope = (p1[0]-p2[0])/(p1[1]-p2[1]);
   }
   var nps = [];
