@@ -105,9 +105,10 @@ canvas.addEventListener('mousedown', function(e) {
 */
 
 var last;
+var first;
 function init2(){
     //canvas.onmousedown = (e)=>{paint=true;edget = new Set([getCursorPosition(canvas,e)]);last = getCursorPosition(canvas,e);}
-    canvas.onmousedown = (e)=>{paint=true;edget = new Set([findPos(e,canvas)]);last =findPos(e,canvas);}
+    canvas.onmousedown = (e)=>{paint=true;edget = new Set([findPos(e,canvas)]);first = findPos(e,canvas);last =findPos(e,canvas);}
     canvas.onmousemove = (e)=>{
       if(paint)
       {
@@ -138,7 +139,20 @@ function init2(){
       }
     }
     canvas.onmouseleave = ()=>{paint=false;}
-    canvas.onmouseup = ()=>{paint=false;}
+    canvas.onmouseup = ()=>
+    {
+      paint=false;
+      lp = getLinePoints(first,last);
+      for(var i=0;i<lp.length;i++)
+      {
+        edget.add(lp[i]);
+        data[(lp[i][1]*image.width + lp[i][0])*4] = 0;
+        data[(lp[i][1]*image.width + lp[i][0])*4+1] = 255;
+        data[(lp[i][1]*image.width +lp[i][0])*4+2] = 0;
+        imageData.data = data;
+        
+      }}
+      context.putImageData(imageData,0,0);
 }
 
 function getLinePoints(p1,p2)
