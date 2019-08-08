@@ -141,6 +141,7 @@ function init2(){
     canvas.onmouseleave = ()=>{paint=false;}
     canvas.onmouseup = ()=>
     {
+      var data = imageData.data;
       paint=false;
       lp = getLinePoints(first,last);
       for(var i=0;i<lp.length;i++)
@@ -151,8 +152,9 @@ function init2(){
         data[(lp[i][1]*image.width +lp[i][0])*4+2] = 0;
         imageData.data = data;
         
-      }}
+      }
       context.putImageData(imageData,0,0);
+    }
 }
 
 function getLinePoints(p1,p2)
