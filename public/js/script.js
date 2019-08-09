@@ -267,8 +267,7 @@ function done()
   document.body.removeChild(canvas);
   var c = document.createElement("canvas");
   c.id = 'edit';
-  var ctx = c.getContext()
-  ctx = canvas.getContext('2d');
+  var ctx = c.getContext('2d')
   c.width = image.width;
   c.height = image.height;
   ctx.drawImage(image, 0, 0);
