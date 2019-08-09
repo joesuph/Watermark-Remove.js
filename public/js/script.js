@@ -9,6 +9,7 @@ var edget;
 var first;
 var last;
 var region = new Set();
+var wimageData;
 
 window.addEventListener('load', init);
 
@@ -28,7 +29,7 @@ function init()
 
     tint = [255,255,255]
     imageData.data = addWatermark(imageData.data,tint);
-
+    wimageData = imageData.data;
     context.putImageData(imageData,0,0);
     
 
@@ -272,18 +273,20 @@ function done()
   c.height = image.height;
   ctx.drawImage(image, 0, 0);
   imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  imageData.data = wimageData;
+  ctx.putImageData(imageData);
   document.body.appendChild(c);
 
   //Add range
   var range = document.createElement('input');
   range.type = 'range';
-  range.min = '0';
-  range.max = '.99';
+  range.min = '1';
+  range.max = '100';
   document.body.appendChild(range);
 
   range.oninput = (e)=>{
     var data = imageData.data;
-    var alpha = range.value;
+    var alpha = range.value/100;
     var arr = Array.from(region);
     var point;
     for(var i=0;i<arr.length;i++)
