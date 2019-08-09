@@ -29,7 +29,7 @@ function init()
 
     tint = [255,255,255]
     imageData.data = addWatermark(imageData.data,tint);
-    wimageData = imageData.data;
+    wimageData = Array.from(imageData.data);
     context.putImageData(imageData,0,0);
     
 
@@ -272,7 +272,7 @@ function done()
   c.width = image.width;
   c.height = image.height;
   ctx.drawImage(image, 0, 0);
-  imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  imageData = ctx.getImageData(0, 0, c.width, c.height);
   imageData.data = wimageData;
   ctx.putImageData(imageData,0,0);
   document.body.appendChild(c);
