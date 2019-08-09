@@ -8,6 +8,7 @@ var paint = false;
 var edget;
 var first;
 var last;
+var region = new Set();
 
 window.addEventListener('load', init);
 
@@ -81,14 +82,15 @@ function init()
 
       var inner = getInner(Array.from(edget));
       var visited = Array.from(fill(edget,inner));
+      visited.forEach(item => region.add(item));
       var vot=[];
       for(var i=0;i<visited.length;i++){vot.push(pointify(visited[i]));}
 
       for(var i=0;i<vot.length;i++)
       {
-        data[(vot[i][1]*image.width + vot[i][0])*4] = 255;
-        data[(vot[i][1]*image.width + vot[i][0])*4+1] = 255;
-        data[(vot[i][1]*image.width +vot[i][0])*4+2] = 0;
+        data[(vot[i][1]*image.width + vot[i][0])*4] = 255 * .25 + data[(vot[i][1]*image.width + vot[i][0])*4] * .75;
+        data[(vot[i][1]*image.width + vot[i][0])*4+1] = 255 * .25 + data[(vot[i][1]*image.width + vot[i][0])*4+1]*.75 ;
+        data[(vot[i][1]*image.width +vot[i][0])*4+2] = 0+ data[(vot[i][1]*image.width +vot[i][0])*4+2]*.75;
         imageData.data = data;
         
       }
@@ -180,42 +182,6 @@ function pointify(num){return [num % image.width,Math.floor(num / image.width)];
  * Get integer representation of pixels within edge list
  * starting from innerpoint
  *******************************************************/
-function fillO(edges,inner)
-{
-  var r;
-  var l;
-  var d;
-  var u;
-
-  var count=0;
-  var visited = new Set();
-  var visit_later=[inner];
-  while(visit_later.length != 0)
-  {
-    r = intify([visit_later[0][0]+1,visit_later[0][1]])
-    l = intify([visit_later[0][0]-1,visit_later[0][1]])
-    d = intify([visit_later[0][0],visit_later[0][1]+1])
-    u = intify([visit_later[0][0],visit_later[0][1]-1])
-
-    if(!visited.has(r) && !edges.has(r))
-      visit_later.push([visit_later[0][0]+1,visit_later[0][1]])
-    if(!visited.has(l) && !edges.has(l))
-      visit_later.push([visit_later[0][0]-1,visit_later[0][1]])
-    if(!visited.has(d) && !edges.has(d))
-      visit_later.push([visit_later[0][0],visit_later[0][1]+1])
-    if(!visited.has(u) && !edges.has(u))
-      visit_later.push([visit_later[0][0],visit_later[0][1]-1])
-    
-    visited.add(intify(visit_later[0]));
-    visit_later.shift();
-
-    count++;
-    if(count > image.width * image.height * .01){console.log('Diverge');return visited;}
-    
-  }
-  return visited;
-}
-
 function fill(edges,inner)
 {
   var r;
@@ -247,7 +213,7 @@ function fill(edges,inner)
     visit_later.delete(intify(v));
 
     count++;
-    if(count > image.width * image.height * .01){console.log('Diverge');return visited;}
+    if(count > image.width * image.height * .5){console.log('Diverge');return visited;}
     
   }
   return visited;
@@ -292,4 +258,44 @@ function getLinePoints(p1,p2)
 	}
 	return nps;
   
+}
+
+document.getElementById('done').onclick = done;
+
+function done()
+{
+  document.body.removeChild(canvas);
+  var c = document.createElement("canvas");
+  c.id = 'edit';
+  var ctx = c.getContext()
+  ctx = canvas.getContext('2d');
+  c.width = image.width;
+  c.height = image.height;
+  ctx.drawImage(image, 0, 0);
+  imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  document.body.appendChild(c);
+
+  //Add range
+  var range = document.createElement('input');
+  range.type = 'range';
+  range.min = '0';
+  range.max = '.99';
+  document.body.appendChild(range);
+
+  range.oninput = (e)=>{
+    var data = imageData.data;
+    var alpha = range.value;
+    var arr = Array.from(region);
+    var point;
+    for(var i=0;i<arr.length;i++)
+    {
+      point = pointify(arr[i]);
+      data[(point[1]*image.width + point[0])*4] = (data[(point[1]*image.width + point[0])*4]-(255 * alpha))/(1-alpha);
+      data[(point[1]*image.width + point[0])*4+1] = (data[(point[1]*image.width + point[0])*4+1]-(255 * alpha))/(1-alpha);
+      data[(point[1]*image.width +point[0])*4+2] = (data[(point[1]*image.width +point[0])*4+2]-(255 * alpha))/(1-alpha);
+
+    }
+    imageData.data = data;
+    ctx.putImageData(imageData,0,0);
+  };
 }
