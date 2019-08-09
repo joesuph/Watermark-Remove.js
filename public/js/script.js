@@ -180,7 +180,7 @@ function pointify(num){return [num % image.width,Math.floor(num / image.width)];
  * Get integer representation of pixels within edge list
  * starting from innerpoint
  *******************************************************/
-function fill(edges,inner)
+function fillO(edges,inner)
 {
   var r;
   var l;
@@ -210,7 +210,44 @@ function fill(edges,inner)
     visit_later.shift();
 
     count++;
-    if(count > image.width * image.height * .3){console.log('Diverge');return visited;}
+    if(count > image.width * image.height * .01){console.log('Diverge');return visited;}
+    
+  }
+  return visited;
+}
+
+function fill(edges,inner)
+{
+  var r;
+  var l;
+  var d;
+  var u;
+
+  var count=0;
+  var visited = new Set();
+  var visit_later=new Set([intify(inner)]);
+  while(visit_later.length != 0)
+  {
+    v = pointify(Array.from(visit_later)[0]);
+    r = intify([v[0]+1,v[1]])
+    l = intify([v[0]-1,v[1]])
+    d = intify([v[0],v[1]+1])
+    u = intify([v[0],v[1]-1])
+
+    if(!visited.has(r) && !edges.has(r))
+      visit_later.add(r)
+    if(!visited.has(l) && !edges.has(l))
+      visit_later.add(l)
+    if(!visited.has(d) && !edges.has(d))
+      visit_later.add(d)
+    if(!visited.has(u) && !edges.has(u))
+      visit_later.add(u)
+    
+    visited.add(intify(v));
+    visit_later.delete(intify(v));
+
+    count++;
+    if(count > image.width * image.height * .01){console.log('Diverge');return visited;}
     
   }
   return visited;
