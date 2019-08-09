@@ -77,6 +77,22 @@ function init()
         
       }
       context.putImageData(imageData,0,0);
+
+
+      var inner = getInner(edget);
+      var visited = Array.from(fill(edget,inner));
+      var vot=[];
+      for(var i=0;i<visited.length;i++){vot.push(pointify(visited[i]));}
+
+      for(var i=0;i<vot.length;i++)
+      {
+        data[(vot[i][1]*image.width + vot[i][0])*4] = 255;
+        data[(vot[i][1]*image.width + vot[i][0])*4+1] = 255;
+        data[(vot[i][1]*image.width +vot[i][0])*4+2] = 0;
+        imageData.data = data;
+        
+      }
+      context.putImageData(imageData,0,0);
     }
 }
 
@@ -147,11 +163,11 @@ function findPos(e,obj) {
 function getInner(edges)
 {
   var edd;
-  for(var i=0;i<edges.length;i++){edd.push(pointify(edges[i]))}
-  var arr = edd.sort((a,b)=>{return a[0]-b[0]});
+  for(var i=0;i<edges.length;i++){edd.push(pointify(edges[i]))} //Fill edd with the point notation of the data from edges
+  var arr = edd.sort((a,b)=>{return a[0]-b[0]});               //Sort to get  the farthest left point
   var left = arr[0][0];
-  var avg = (arr[1][1] + arr[2][1])/2;
-  return [left+1,Math.round(avg)];
+  var avg = (arr[1][1] + arr[2][1])/2;                        //Take the avg of nearby points to get the trend of height
+  return [left+1,Math.round(avg)];             //return inner point as 1 pixel to the right of the leftist edge pixel and the height of the avg
 }
 
 /*******************************************************
@@ -166,12 +182,38 @@ function pointify(num){return [num % image.width,Math.floor(num / image.width)];
  *******************************************************/
 function fill(edges,inner)
 {
+  var r;
+  var l;
+  var d;
+  var u;
+
+  var count=0;
   var visited = new Set();
   var visit_later=[inner];
   while(visit_later.length != 0)
   {
-    visit__later
+    r = intify([visit_later[0][0]+1,visit_later[0][0]])
+    l = intify([visit_later[0][0]-1,visit_later[0][0]])
+    d = intify([visit_later[0][0],visit_later[0][0]+1])
+    u = intify([visit_later[0][0],visit_later[0][0]-1])
+
+    if(!visited.has(r) && !edges.has(r))
+      visit_later.push([visit_later[0][0]+1,visit_later[0][0]])
+    if(!visited.has(l) && !edges.has(l))
+      visit_later.push([visit_later[0][0]-1,visit_later[0][0]])
+    if(!visited.has(d) && !edges.has(d))
+      visit_later.push([visit_later[0][0],visit_later[0][0]+1])
+    if(!visited.has(u) && !edges.has(u))
+      visit_later.push([visit_later[0][0],visit_later[0][0]-1])
+    
+    visited.add(intify(visit_later[0]));
+    visit_later.shift();
+
+    count++;
+    if(count > image.width * image.height * .3){console.log('Diverge');return;}
+    
   }
+  return visited;
 }
 
 
@@ -181,35 +223,35 @@ function fill(edges,inner)
 function getLinePoints(p1,p2)
 {
 	var slope;
-  var b;
-  var e;
+  var begin;
+  var end;
   var original;
   
-  var horiz = Math.abs(p1[0]-p2[0]) > Math.abs(p1[1]-p2[1]);
+  var horiz = Math.abs(p1[0]-p2[0]) > Math.abs(p1[1]-p2[1]); //Find pixel increment direction
   
   //Get start x,y and ending y
-  if(horiz)
+  if(horiz)     //if pixel increment is left to right
   {
-    if(p1[0]<p2[0]){b=p1[0];e=p2[0];original=p1[1];}
-    else {b=p2[0];e=p1[0];original=p2[1];}
+    if(p1[0]<p2[0]){begin=p1[0];end=p2[0];original=p1[1];}
+    else {begin=p2[0];end=p1[0];original=p2[1];}
     slope = (p1[1]-p2[1])/(p1[0]-p2[0]);
 
   }
   else
   {
-    if(p1[1]<p2[1]){b=p1[1];e=p2[1];original=p1[0];}
-    else {b=p2[1];e=p1[1];original=p2[0];}
+    if(p1[1]<p2[1]){begin=p1[1];end=p2[1];original=p1[0];}
+    else {begin=p2[1];end=p1[1];original=p2[0];}
     slope = (p1[0]-p2[0])/(p1[1]-p2[1]);
   }
   var nps = [];
-	var s = b + 1;
+	var state = begin + 1;
   //(yn-yo)/(xn-xo)=slope
   // yn = slope*(xn-xo)+yo
-  while(s<e)
+  while(state<end)
 	{
-	  if(horiz)nps.push([s,Math.round((s-b)*slope+original)])
-    else nps.push([Math.round((s-b)*slope+original),s])
-	  s+= 1;
+	  if(horiz)nps.push([state,Math.round((state-begin)*slope+original)])
+    else nps.push([Math.round((state-begin)*slope+original),state])
+	  state+= 1;
 	}
 	return nps;
   
