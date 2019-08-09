@@ -28,8 +28,9 @@ function init()
     imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
     tint = [255,255,255]
-    imageData.data = addWatermark(imageData.data,tint);
-    wimageData = Array.from(imageData.data);
+    var temp = addWatermark(imageData.data,tint);
+    imageData.data = temp
+    wimageData = temp;
     context.putImageData(imageData,0,0);
     
 
