@@ -79,7 +79,7 @@ function init()
       context.putImageData(imageData,0,0);
 
 
-      var inner = getInner(edget);
+      var inner = getInner(Array.from(edget));
       var visited = Array.from(fill(edget,inner));
       var vot=[];
       for(var i=0;i<visited.length;i++){vot.push(pointify(visited[i]));}
@@ -162,7 +162,7 @@ function findPos(e,obj) {
  ***********************************************/
 function getInner(edges)
 {
-  var edd;
+  var edd=[];
   for(var i=0;i<edges.length;i++){edd.push(pointify(edges[i]))} //Fill edd with the point notation of the data from edges
   var arr = edd.sort((a,b)=>{return a[0]-b[0]});               //Sort to get  the farthest left point
   var left = arr[0][0];
@@ -192,25 +192,25 @@ function fill(edges,inner)
   var visit_later=[inner];
   while(visit_later.length != 0)
   {
-    r = intify([visit_later[0][0]+1,visit_later[0][0]])
-    l = intify([visit_later[0][0]-1,visit_later[0][0]])
-    d = intify([visit_later[0][0],visit_later[0][0]+1])
-    u = intify([visit_later[0][0],visit_later[0][0]-1])
+    r = intify([visit_later[0][0]+1,visit_later[0][1]])
+    l = intify([visit_later[0][0]-1,visit_later[0][1]])
+    d = intify([visit_later[0][0],visit_later[0][1]+1])
+    u = intify([visit_later[0][0],visit_later[0][1]-1])
 
     if(!visited.has(r) && !edges.has(r))
-      visit_later.push([visit_later[0][0]+1,visit_later[0][0]])
+      visit_later.push([visit_later[0][0]+1,visit_later[0][1]])
     if(!visited.has(l) && !edges.has(l))
-      visit_later.push([visit_later[0][0]-1,visit_later[0][0]])
+      visit_later.push([visit_later[0][0]-1,visit_later[0][1]])
     if(!visited.has(d) && !edges.has(d))
-      visit_later.push([visit_later[0][0],visit_later[0][0]+1])
+      visit_later.push([visit_later[0][0],visit_later[0][1]+1])
     if(!visited.has(u) && !edges.has(u))
-      visit_later.push([visit_later[0][0],visit_later[0][0]-1])
+      visit_later.push([visit_later[0][0],visit_later[0][1]-1])
     
     visited.add(intify(visit_later[0]));
     visit_later.shift();
 
     count++;
-    if(count > image.width * image.height * .3){console.log('Diverge');return;}
+    if(count > image.width * image.height * .3){console.log('Diverge');return visited;}
     
   }
   return visited;
