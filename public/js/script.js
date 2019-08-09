@@ -274,7 +274,7 @@ function done()
   ctx.drawImage(image, 0, 0);
   imageData = context.getImageData(0, 0, canvas.width, canvas.height);
   imageData.data = wimageData;
-  ctx.putImageData(imageData);
+  ctx.putImageData(imageData,0,0);
   document.body.appendChild(c);
 
   //Add range
