@@ -8,8 +8,8 @@ var paint = false;
 var edget;
 var first;
 var last;
+var wimdata;
 var region = new Set();
-var wimageData;
 
 window.addEventListener('load', init);
 
@@ -26,11 +26,9 @@ function init()
     context.drawImage(image, 0, 0);
 
     imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
+    wimdata = new Uint8ClampedArray(imageData.data);
     tint = [255,255,255]
-    var temp = addWatermark(imageData.data,tint);
-    imageData.data = temp
-    wimageData = temp;
+    imageData.data = addWatermark(imageData.data,tint);
     context.putImageData(imageData,0,0);
     
 
@@ -274,8 +272,10 @@ function done()
   c.height = image.height;
   ctx.drawImage(image, 0, 0);
   imageData = ctx.getImageData(0, 0, c.width, c.height);
-  imageData.data = wimageData;
+  //Added these 2 lines
+  imageData.data.set(wimdata);
   ctx.putImageData(imageData,0,0);
+  //Set imageData equal to one
   document.body.appendChild(c);
 
   //Add range
