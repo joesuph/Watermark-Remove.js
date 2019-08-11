@@ -286,6 +286,7 @@ function done()
   document.body.appendChild(range);
 
   range.oninput = (e)=>{
+    imageData.data.set(wimdata);
     var data = imageData.data;
     var alpha = range.value/100;
     var arr = Array.from(region);
