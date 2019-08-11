@@ -19,6 +19,11 @@ function init()
     Add Watermark to image and place it in canvas
     ********************************************/
     image = document.getElementById('img');
+    if(image.width > image.height)
+      image.width = 500;
+    else
+      image.height = 500;
+
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
     canvas.width = image.width;
