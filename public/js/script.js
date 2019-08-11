@@ -26,9 +26,9 @@ function init()
     context.drawImage(image, 0, 0);
 
     imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    wimdata = new Uint8ClampedArray(imageData.data);
     tint = [255,255,255]
     imageData.data = addWatermark(imageData.data,tint);
+    wimdata = new Uint8ClampedArray(imageData.data);
     context.putImageData(imageData,0,0);
     
 
