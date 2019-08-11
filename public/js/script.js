@@ -269,6 +269,7 @@ document.getElementById('done').onclick = done;
 
 function done()
 {
+  document.body.removeChild(document.getElementById('done'));
   document.body.removeChild(canvas);
   var c = document.createElement("canvas");
   c.id = 'edit';
@@ -287,13 +288,13 @@ function done()
   var range = document.createElement('input');
   range.type = 'range';
   range.min = '1';
-  range.max = '100';
+  range.max = '1000';
   document.body.appendChild(range);
 
   range.oninput = (e)=>{
     imageData.data.set(wimdata);
     var data = imageData.data;
-    var alpha = range.value/100;
+    var alpha = range.value/1000;
     var arr = Array.from(region);
     var point;
     for(var i=0;i<arr.length;i++)
