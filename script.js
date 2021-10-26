@@ -284,7 +284,8 @@ document.getElementById('done').onclick = done;
 
 function done()
 {
-  document.body.removeChild(document.getElementById('done'));
+  $('#done').remove()
+  $('#canvas').remove()
   document.body.removeChild(canvas);
   var c = document.createElement("canvas");
   c.id = 'edit';
