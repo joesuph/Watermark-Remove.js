@@ -60,7 +60,6 @@ function initRemoval()
       if(paint)
       {
         var data = imageData.data;
-        console.log('move');
         var p1 = findPos(e,canvas);
         var lp = getLinePoints(last,p1);
         last = p1;
@@ -286,7 +285,6 @@ function done()
 {
   $('#done').remove()
   $('#canvas').remove()
-  document.body.removeChild(canvas);
   var c = document.createElement("canvas");
   c.id = 'edit';
   var ctx = c.getContext('2d')
