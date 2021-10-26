@@ -1,4 +1,4 @@
-var image;
+var image = document.getElementById('img')
 var canvas;
 var context;
 var imageData;
@@ -11,14 +11,29 @@ var last;
 var wimdata;
 var region = new Set();
 
-window.addEventListener('load', init);
 
-function init()
+$('#example').click(()=>{
+    image.src='example.jpg';
+    $('#area').show()
+    setTimeout(initRemoval,1000)
+})
+
+var upload_set_butt = $('#upload').change(()=>{
+  var fr = new FileReader();
+  fr.onload = ()=>{
+      image.src = fr.result;
+      $('#area').show()
+      setTimeout(initRemoval,1000)
+  }
+  fr.readAsDataURL($('#upload')[0].files[0])
+})
+
+function initRemoval()
 {
+  
     /********************************************
-    Add Watermark to image and place it in canvas
+    Add Watermarked image and place it in canvas
     ********************************************/
-    image = document.getElementById('img');
     if(image.width > image.height)
       image.width = 500;
     else
@@ -32,7 +47,7 @@ function init()
 
     imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     tint = [255,255,255]
-    imageData.data = addWatermark(imageData.data,tint);
+    //imageData.data = addWatermark(imageData.data,tint);
     wimdata = new Uint8ClampedArray(imageData.data);
     context.putImageData(imageData,0,0);
     
@@ -289,6 +304,7 @@ function done()
   range.type = 'range';
   range.min = '1';
   range.max = '1000';
+  range.style.display = 'block';
   document.body.appendChild(range);
 
   range.oninput = (e)=>{
