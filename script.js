@@ -304,6 +304,9 @@ function done()
   range.min = '1';
   range.max = '1000';
   range.style.display = 'block';
+ 
+
+  $('body').append($('<p>Adjust slider to undo watermark</p>'))
   document.body.appendChild(range);
 
   range.oninput = (e)=>{
